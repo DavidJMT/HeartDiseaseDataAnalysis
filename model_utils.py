@@ -29,10 +29,11 @@ def evaluate_model(model, model_name, feature_columns, param_grid, use_grid, X_t
             cv=5,              # cross-validation with 5 folds
             scoring='accuracy', # percentage of correct predictions
             n_jobs=-1,         # uses all cpu cores
-            verbose=2          # mostra o progresso
+            verbose=1          # mostra o progresso
         )
         grid_search.fit(X_train, y_train) # executes with parameters
         trained_model = grid_search.best_estimator_ 
+        print('Best parameters:' , grid_search.best_params_);
         predictions = trained_model.predict(X_test)
     else:
         model.fit(X_train, y_train)
@@ -49,29 +50,32 @@ def evaluate_model(model, model_name, feature_columns, param_grid, use_grid, X_t
         'feature': feature_columns,
         'importance': trained_model.feature_importances_
         })
-            
-        importances['feature'] = importances['feature'].map(feature_names)
-        importances = importances.sort_values('importance', ascending=False)
-
-        plt.figure(figsize=(10, 6))
-        plt.barh(importances['feature'], importances['importance'], color='steelblue')
-        plt.xlabel("Importance")
-        plt.title(f"Feature Importance — {model_name}")
-        plt.gca().invert_yaxis()
-        plt.tight_layout()
-        plt.show()
 
         plt.figure(figsize=(20, 10))
         plot_tree(
-            trained_model.estimators_[0],  # primeira árvore da floresta
-            feature_names=list(feature_names.values()),  # nomes que já definiste
+            trained_model.estimators_[0],  # first tree from the forest
+            feature_names=list(feature_names.values()),  # already defined name
             class_names=['Healthy', 'Disease'],
-            filled=True,       # cores diferentes por classe
-            rounded=True,      # cantos arredondados
-            max_depth=3        # só mostra 3 níveis para não ficar gigante
+            filled=True,       # colors filled by class
+            rounded=True,      # rounder courners
+            max_depth=3        # only shows 3 levels
         )
-        plt.title("Uma árvore do Random Forest (profundidade 3)")
+        plt.title("Random Forest Tree (Depth 3)")
         plt.show()
+
+    if(model_name == 'LogisticRegression'):
+        lr_model = trained_model.named_steps['model']
+
+        importances = pd.DataFrame({
+        'feature': feature_columns,
+        'importance': lr_model.coef_[0] 
+        })
+
+    importances['feature'] = importances['feature'].map(feature_names)
+    importances = importances.sort_values('importance', ascending=False)
+
+    print(f"\nFeature Importance — {model_name}")
+    print(importances.to_string(index=False))
 
     cm = confusion_matrix(y_test, predictions)
 
