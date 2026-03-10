@@ -12,7 +12,6 @@ df = pd.read_csv("heart.csv")
 print(df['target'].value_counts())
 
 print(df.head())
-print(df.describe())
 print(df.isnull().sum())
 
 X = df.drop('target', axis=1)
@@ -43,7 +42,7 @@ lr_pipeline = Pipeline([
     ('model', LogisticRegression(random_state=42))
 ])
 
-evaluate_model(lr_pipeline,'LogisticRegression', X.columns, param_grid_lr, True, X_train, X_test, y_train, y_test);
+evaluate_model(lr_pipeline,'LogisticRegression', X.columns, param_grid_lr, True, X_train, X_test, y_train, y_test)
 
 param_grid_svm = {
     'model__C' : [0.01, 0.1, 1, 10],
@@ -56,4 +55,4 @@ svm_pipeline = Pipeline([
     ('model', SVC(random_state=42))
 ])
 
-evaluate_model(svm_pipeline,'SVM', X.columns, param_grid_svm, True, X_train, X_test, y_train, y_test);
+evaluate_model(svm_pipeline,'SVM', X.columns, param_grid_svm, True, X_train, X_test, y_train, y_test)
