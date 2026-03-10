@@ -62,6 +62,8 @@ def evaluate_model(model, model_name, feature_columns, param_grid, use_grid, X_t
         )
         plt.title("Random Forest Tree (Depth 3)")
         plt.show()
+        
+    importances = None
 
     if(model_name == 'LogisticRegression'):
         lr_model = trained_model.named_steps['model']
@@ -71,11 +73,12 @@ def evaluate_model(model, model_name, feature_columns, param_grid, use_grid, X_t
         'importance': lr_model.coef_[0] 
         })
 
-    importances['feature'] = importances['feature'].map(feature_names)
-    importances = importances.sort_values('importance', ascending=False)
+    if importances is not None:
+        importances['feature'] = importances['feature'].map(feature_names)
+        importances = importances.sort_values('importance', ascending=False)
 
-    print(f"\nFeature Importance — {model_name}")
-    print(importances.to_string(index=False))
+        print(f"\nFeature Importance — {model_name}")
+        print(importances.to_string(index=False))
 
     cm = confusion_matrix(y_test, predictions)
 

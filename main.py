@@ -5,6 +5,7 @@ from model_utils import evaluate_model
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
 
 df = pd.read_csv("heart.csv")   
 
@@ -43,3 +44,16 @@ lr_pipeline = Pipeline([
 ])
 
 evaluate_model(lr_pipeline,'LogisticRegression', X.columns, param_grid_lr, True, X_train, X_test, y_train, y_test);
+
+param_grid_svm = {
+    'model__C' : [0.01, 0.1, 1, 10],
+    'model__kernel': ['linear','rbf'],
+    'model__gamma': ['auto','scale']
+}
+
+svm_pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('model', SVC(random_state=42))
+])
+
+evaluate_model(svm_pipeline,'SVM', X.columns, param_grid_svm, True, X_train, X_test, y_train, y_test);
