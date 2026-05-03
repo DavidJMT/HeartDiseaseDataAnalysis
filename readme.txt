@@ -25,24 +25,6 @@ This project trains and evaluates three models — **Random Forest**, **Logistic
 └── README.md
 ```
 
-## Getting Started
-
-**1. Clone the repo**
-```bash
-git clone https://github.com/your-username/heart-disease-classifier.git
-cd heart-disease-classifier
-```
-
-**2. Install dependencies**
-```bash
-pip install pandas scikit-learn
-```
-
-**3. Run**
-```bash
-python main.py
-```
-
 ## Dataset
 
 The dataset (`heart.csv`) contains 14 clinical features including age, sex, chest pain type, resting blood pressure, cholesterol, and others. The `target` column indicates the presence (1) or absence (0) of heart disease.
